@@ -17,10 +17,11 @@ warnings.filterwarnings("ignore")
 
 
 class test_SitesDataset(Dataset):
-
-    def __init__(self, root_dir='', transform=None):
-        self.root_dir = os.path.join(root_dir, 'test')
-        self.img_dir = [os.path.join(self.root_dir, i) for i in sorted(os.listdir(self.root_dir))]
+    def __init__(self, root_dir="", transform=None):
+        self.root_dir = os.path.join(root_dir, "test")
+        self.img_dir = [
+            os.path.join(self.root_dir, i) for i in sorted(os.listdir(self.root_dir))
+        ]
         self.transform = transform
 
     def __len__(self):
@@ -32,4 +33,4 @@ class test_SitesDataset(Dataset):
         image = Image.open(img_dir)
         if self.transform is not None:
             image = self.transform(image)
-        return {'dir': img_dir, 'image': image}
+        return {"dir": img_dir, "image": image}

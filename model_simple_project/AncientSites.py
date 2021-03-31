@@ -17,9 +17,8 @@ warnings.filterwarnings("ignore")
 
 
 class SitesDataset(Dataset):
-
-    def __init__(self, coordinate_txt, root_dir='', transform=None):
-        self.info = pd.read_csv(coordinate_txt, sep='\t')
+    def __init__(self, coordinate_txt, root_dir="", transform=None):
+        self.info = pd.read_csv(coordinate_txt, sep="\t")
         # root where you put the train folder
         self.root_dir = [os.path.join(root_dir, i) for i in self.info.iloc[:, 5]]
 
@@ -39,4 +38,4 @@ class SitesDataset(Dataset):
         if self.transform is not None:
             image = self.transform(image)
 
-        return {'Image': image, 'label': label}
+        return {"Image": image, "label": label}

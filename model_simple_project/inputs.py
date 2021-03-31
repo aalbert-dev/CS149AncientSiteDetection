@@ -23,7 +23,7 @@ def load_data_from_gs(args):
     bucket_name = args.root_dir
     bucket = storage.Client().bucket(bucket_name)
     blob = bucket.blob("train.zip")
-    obj_bytes = blob.download_as_bytes()
+    obj_bytes = blob.download_as_string()
 
     archive = io.BytesIO()
     archive.write(obj_bytes)

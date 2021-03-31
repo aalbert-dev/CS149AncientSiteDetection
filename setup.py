@@ -19,7 +19,9 @@ from setuptools import setup
 
 REQUIRED_PACKAGES = [
     'google-cloud-storage>=1.14.0',
-    'pandas>=0.23.4'
+    'pandas>=0.23.4',
+    'scikit-image>=0.17.2',
+    'tqdm>=4.58.0'
 ]
 
 setup(

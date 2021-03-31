@@ -35,8 +35,8 @@ REGION=us-central1
 # JOB_DIR: Where to store prepared package and upload output model.
 JOB_DIR=gs://${BUCKET_NAME}/${JOB_NAME}/models
 
-# Datasets are set by datasets/download-taxi.sh script
-TRAIN_PATH=gs://cosi149p1
+# Datasets are in as train.zip
+TRAIN_PATH=gs://${BUCKET_NAME}
 
 gcloud ai-platform jobs submit training ${JOB_NAME} \
     --region ${REGION} \

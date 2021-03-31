@@ -13,18 +13,23 @@
 # limitations under the License.
 
 import datetime
-import subprocess
+import io
 
 from google.cloud import storage
+from zipfile import ZipFile
 
 
 def load_data_from_gs(args):
     bucket_name = args.root_dir
+    bucket = storage.Client().bucket(bucket_name)
+    blob = bucket.blob("train.zip")
+    obj_bytes = blob.download_as_bytes()
 
-    p = subprocess.run(
-        f"gsutil cp -r {bucket_name} .", stderr=subprocess.STDOUT, text=True
-    )
-    print(p)
+    archive = io.BytesIO()
+    archive.write(obj_bytes)
+
+    with ZipFile(archive, "w") as zip_archive:
+        zip_archive.extractall(".")
 
 
 def save_model(args):

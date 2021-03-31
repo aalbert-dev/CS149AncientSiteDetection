@@ -23,7 +23,7 @@ REQUIRED_PACKAGES = [
 ]
 
 setup(
-    name='trainer',
+    name='model_simple_project',
     version='0.1',
     install_requires=REQUIRED_PACKAGES,
     packages=find_packages(),

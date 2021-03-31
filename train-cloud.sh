@@ -18,7 +18,7 @@
 echo "Submitting AI Platform PyTorch job"
 
 # BUCKET_NAME: Change to your bucket name.
-BUCKET_NAME=cosi149test
+BUCKET_NAME=project_1_upload
 
 # The PyTorch image provided by AI Platform Training.
 IMAGE_URI=gcr.io/cloud-ml-public/training/pytorch-xla.1-7
@@ -26,7 +26,7 @@ IMAGE_URI=gcr.io/cloud-ml-public/training/pytorch-xla.1-7
 # JOB_NAME: the name of your job running on AI Platform.
 JOB_NAME="cosi149_$(date +%Y%m%d_%H%M%S)"
 
-PACKAGE_PATH=./trainer # this can be a GCS location to a zipped and uploaded package
+PACKAGE_PATH=./model_simple_project # this can be a GCS location to a zipped and uploaded package
 
 # REGION: select a region from https://cloud.google.com/ml-engine/docs/regions
 # or use the default '`us-central1`'. The region is where the job will be run.
@@ -36,22 +36,21 @@ REGION=us-central1
 JOB_DIR=gs://${BUCKET_NAME}/${JOB_NAME}/models
 
 # Datasets are set by datasets/download-taxi.sh script
-TRAIN_FILES=gs://cloud-samples-data/ai-platform/chicago_taxi/training/small/taxi_trips_train.csv
-EVAL_FILES=gs://cloud-samples-data/ai-platform/chicago_taxi/training/small/taxi_trips_eval.csv
+TRAIN_PATH=gs://cosi149p1
 
 gcloud ai-platform jobs submit training ${JOB_NAME} \
     --region ${REGION} \
     --master-image-uri ${IMAGE_URI} \
     --scale-tier BASIC \
     --job-dir ${JOB_DIR} \
-    --module-name trainer.task \
+    --module-name model_simple_project.train \
     --package-path ${PACKAGE_PATH} \
     -- \
-    --train-files ${TRAIN_FILES} \
-    --eval-files ${EVAL_FILES} \
+    --root-dir ${TRAIN_PATH} \
     --num-epochs 10 \
-    --batch-size 100 \
-    --learning-rate 0.001
+    --batch-size 128 \
+    --lr 0.01 \
+    --seed 420
 
 # Stream the logs from the job
 gcloud ai-platform jobs stream-logs ${JOB_NAME}

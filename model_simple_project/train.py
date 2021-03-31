@@ -38,7 +38,7 @@ def parse_args():
         default="",
         help="root where train and test folders is on",
     )
-
+    parser.add_argument("--job-dir", help="GCS location to export models")
     parser.add_argument(
         "--seed", type=int, default=100, help="Random seed (default: 123)"
     )

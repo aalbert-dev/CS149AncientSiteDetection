@@ -17,9 +17,9 @@ def parse_args():
     parser = argparse.ArgumentParser(description='AncientSites Detection')
     parser.add_argument('--batch-size', type=int, default = 128,
                         help='input batch size for training (default: 128)')
-    parser.add_argument('--num-epochs', type=int, default = 10,
+    parser.add_argument('--num-epochs', type=int, default = 50,
                         help='Number of epochs to train each model for (default: 10)')
-    parser.add_argument('--lr', type=float, default=0.01,
+    parser.add_argument('--lr', type=float, default=0.001,
                         help='learning rate (default: 0.01)')
     parser.add_argument('--root-dir', type = str, default = '',
                         help='root where train and test folders is on')
@@ -101,9 +101,10 @@ def main():
     loss_function = nn.CrossEntropyLoss()
 
     device0 = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-    # model_res = ResModel().to(device0)
-    model_res = SimpleModel().to(device0)
-    train(model = model_res, train_loader = train_loader, dev_loader = dev_loader,
+    #model_res = ResModel().to(device0)
+    model_res50 = models.resnet50(pretrained=True).to(device0)
+    #model_res = SimpleModel().to(device0)
+    train(model = model_res50, train_loader = train_loader, dev_loader = dev_loader,
           loss_function = loss_function, device = device0, learning_rate = args.lr)
 
 if __name__ == '__main__':

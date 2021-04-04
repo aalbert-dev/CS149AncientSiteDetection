@@ -10,7 +10,7 @@ import pandas as pd
 import numpy as np
 import os
 from tqdm import tqdm
-
+import cv2
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -25,13 +25,20 @@ class SitesDataset(Dataset):
 
         self.labels = torch.tensor(self.info.iloc[:, 4] > 0)
         self.transform = transform
+        self.image_dict = {}
 
     def __len__(self):
         return len(self.info)
 
     def __getitem__(self, idx):
+        if idx in self.image_dict:
+            return self.image_dict.get(idx)
         img_dir = self.root_dir[idx]
-        image = Image.open(img_dir)
+        #image = Image.open(img_dir)
+        image = np.asarray(Image.open(img_dir))
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR) 
+        # print(type(image))
+        # input()
         # for detection: 1/0
         # for detection on confidence level: 3/2/0
         label = self.labels[idx]
@@ -39,4 +46,6 @@ class SitesDataset(Dataset):
         if self.transform is not None:
             image = self.transform(image)
 
-        return {'Image': image, 'label': label}
+        sample = {'Image': image, 'label': label}
+        self.image_dict[idx] = sample
+        return sample

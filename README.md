@@ -2,6 +2,12 @@
 
 Binary image classification model for ancient site detection.
 
+## Setup
+
+- `pip install -r requirements.txt`
+- Download test set
+- Download model.pt
+
 ## Train
 
 ```bash

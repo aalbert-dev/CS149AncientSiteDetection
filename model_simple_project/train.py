@@ -53,6 +53,7 @@ def train(model, train_loader, dev_loader, loss_function, device, learning_rate)
 
     total_step_epoch = len(train_loader)
     optimizer = torch.optim.Adam(model.parameters(), lr = learning_rate)
+    acc_map = {}
 
     for epoch in tqdm(range(args.num_epochs)):
 
@@ -80,11 +81,12 @@ def train(model, train_loader, dev_loader, loss_function, device, learning_rate)
             for param_group in optimizer.param_groups:
                 param_group['lr'] /= 2
 
-        torch.save(model.state_dict(), 'simple/ModelAt' + str(epoch) + 'Epoch.pt')
-
+        torch.save(model.state_dict(), 'res101/ModelAt' + str(epoch) + 'Epoch.pt')
 
         accuracy = dev(model, dev_loader, device)
+        acc_map[epoch] = accuracy
         print(f"Epoch: {epoch+1} | Loss: {loss.item()} | Test accuracy: {accuracy}")
+        print(f"Best Epoch: {max(acc_map, key=acc_map.get)} | Best accuracy: {max(acc_map.values())}")
 
 def main():
     transform_data = transforms.Compose([
@@ -101,10 +103,8 @@ def main():
     loss_function = nn.CrossEntropyLoss()
 
     device0 = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-    #model_res = ResModel().to(device0)
-    model_res50 = models.resnet50(pretrained=True).to(device0)
-    #model_res = SimpleModel().to(device0)
-    train(model = model_res50, train_loader = train_loader, dev_loader = dev_loader,
+    model_resnet101 = models.resnet101(pretrained=True).to(device0)
+    train(model = model_resnet101, train_loader = train_loader, dev_loader = dev_loader,
           loss_function = loss_function, device = device0, learning_rate = args.lr)
 
 if __name__ == '__main__':

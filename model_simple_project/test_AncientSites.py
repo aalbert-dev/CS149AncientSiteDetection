@@ -30,7 +30,7 @@ class test_SitesDataset(Dataset):
 
     def __getitem__(self, idx):
         img_dir = self.img_dir[idx]
-        image = Image.open(img_dir).convert('RGB')
+        image = Image.open(img_dir).convert("RGB")
         if self.transform is not None:
             image = self.transform(image)
         return {"dir": img_dir, "image": image}

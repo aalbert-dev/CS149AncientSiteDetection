@@ -30,7 +30,6 @@ def test(device, loader):
     model = models.resnet101(pretrained=False).to(device)
     model.load_state_dict(torch.load(args.model))
 
-
     results = pd.DataFrame(columns=["Image name", "predict"])
     
     with torch.no_grad():
@@ -39,9 +38,14 @@ def test(device, loader):
             test_x = test_x.to(device)
             output = model(test_x)
             _, pred_y = output.data.max(1)
-            results.append([[batch["dir"], pred_y]])
+            batch_df = pd.DataFrame({"Image name": batch['dir'], "predict": pred_y.cpu().detach().numpy()})
+            print(batch_df.head())
+
+            results = results.append(batch_df, sort=False, ignore_index=True)
+            results.append(batch_df, sort=False)
 
     return results
+
 
 def main():
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
